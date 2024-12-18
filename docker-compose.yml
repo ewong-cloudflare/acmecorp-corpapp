@@ -1,0 +1,22 @@
+name: acmecorp-app
+    
+services:
+  nextjs:
+    image: nextjs-acmecorp
+    build: 
+      context: ./app
+      dockerfile: ./Dockerfile
+    container_name: acmecorp-app
+    
+  nginx:
+    image: nginx-acmecorp
+    build: 
+      context: ./nginx
+      dockerfile: ./Dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+      # - "443:443"
+    # volumes:
+    #   - /etc/ssl:/etc/nginx/ssl:ro
+    # restart: always
