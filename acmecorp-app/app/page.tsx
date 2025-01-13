@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import styles from "./page.module.css";
 import Hero from "./../components/Hero";
@@ -5,6 +7,7 @@ import EmployeeForm from "../components/EmployeeForm";
 import EmployeeTable from "../components/EmployeeTable";
 
 export default function Home() {
+
   return (
     <main className="min-h-screen bg-black py-24">
       <section className="min-h-64 text-center flex flex-col items-center w-full">
@@ -28,9 +31,7 @@ export default function Home() {
             </section>
             <section className="bg-white p-6 rounded-lg shadow-lg">
               <h2 className="text-2xl font-semibold mb-4 text-black">Employee Records</h2>
-              {/* TODO: to implement API call for getting employees */}
-              {/* <EmployeeTable employees={employees} /> */}
-              <EmployeeTable employees={[]} />
+              <EmployeeTable />
             </section>
           </div>
         </div>
