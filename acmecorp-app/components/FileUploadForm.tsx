@@ -1,16 +1,12 @@
 'use client'
 
-import { useFormStatus } from 'react-dom'
-
 function SubmitButton() {
-  const { pending } = useFormStatus()
   return (
     <button
       type="submit"
-      disabled={pending}
       className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-black disabled:bg-black"
     >
-      {pending ? 'Uploading...' : 'Upload'}
+      Upload
     </button>
   )
 }

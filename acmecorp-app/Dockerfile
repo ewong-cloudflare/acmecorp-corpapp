@@ -12,7 +12,7 @@ RUN npm install --global pm2
 COPY ./package*.json ./
 
 # Install dependencies
-RUN npm install --omit=dev  
+RUN npm ci -only=prod && npm cache clean --force
 
 # Copy all files
 COPY ./ ./

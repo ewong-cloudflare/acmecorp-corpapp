@@ -2,21 +2,54 @@ name: acmecorp-app
     
 services:
   nextjs:
+    container_name: acmecorp-app
     image: nextjs-acmecorp
     build: 
-      context: ./app
+      context: ./acmecorp-app
       dockerfile: ./Dockerfile
-    container_name: acmecorp-app
+    restart: always 
+    environment:
+      - DATABASE_URL=postgresql://postgres:admin@db_service:5432/acmecorp?schema=public
+    volumes:
+      - app_data:/home/node/app_data
+    networks:
+      - net-app
+      - net-postgres 
     
   nginx:
+    container_name: proxy_service
     image: nginx-acmecorp
     build: 
       context: ./nginx
       dockerfile: ./Dockerfile
-    container_name: nginx
     ports:
       - "80:80"
-      # - "443:443"
-    # volumes:
-    #   - /etc/ssl:/etc/nginx/ssl:ro
-    # restart: always
+    networks:
+      - net-app
+
+  db_service:
+    container_name: db_service
+    image: postgres
+    restart: always 
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=acmecorp
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/scripts:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - net-postgres
+
+networks:
+  net-app:
+    name: net-app
+    driver: bridge
+  net-postgres:
+    name: net-postgres
+    driver: bridge
+
+volumes:
+  postgres_data:
+  app_data:
