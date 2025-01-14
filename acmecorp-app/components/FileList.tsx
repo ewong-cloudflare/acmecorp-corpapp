@@ -46,7 +46,7 @@ export default function FileList() {
             <a
               href={getDownloadLink(file.name)}
               download
-              className="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600"
+              className="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-600"
               onClick={() => handleDownload(file.name)}
             >
               Download

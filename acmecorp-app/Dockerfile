@@ -12,10 +12,13 @@ RUN npm install --global pm2
 COPY ./package*.json ./
 
 # Install dependencies
-RUN npm install --production
+RUN npm install --omit=dev  
 
 # Copy all files
 COPY ./ ./
+
+# Initialize prisma client
+RUN npx prisma generate 
 
 # Build app
 RUN npm run build
@@ -27,5 +30,8 @@ EXPOSE 3000
 # The node user is provided in the Node.js Alpine base image
 USER node
 
-# Run npm start script with PM2 when container starts
-CMD [ "pm2-runtime", "npm", "--", "start" ]
+# Give permission to node user
+COPY --chown=node:node . .
+
+# Run npm start script with Prisma migration and seeding, PM2 when container starts
+CMD ["npm", "run", "start:resetseedandmigrate:prod"]

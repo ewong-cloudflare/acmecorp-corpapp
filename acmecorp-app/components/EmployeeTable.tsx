@@ -21,7 +21,7 @@ interface Employee {
     
     return (
       <div className="overflow-x-auto">
-        {employees.length === 0 ? (
+        {(employees == undefined || employees?.length === 0) ? (
           <p className="text-center py-4 text-gray-400">No employees found.</p>
         ) : (
           <table className="min-w-full divide-y divide-gray-700">
@@ -33,7 +33,7 @@ interface Employee {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {employees.map((employee: Employee) => (
+              {employees?.map((employee: Employee) => (
                 <tr key={employee.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">{employee.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{employee.position}</td>
