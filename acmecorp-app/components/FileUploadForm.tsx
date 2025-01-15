@@ -1,26 +1,26 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormStatus } from 'react-dom'
-
 function SubmitButton() {
-  const { pending } = useFormStatus()
   return (
     <button
       type="submit"
-      disabled={pending}
       className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-black disabled:bg-black"
     >
-      {pending ? 'Uploading...' : 'Upload'}
+      Upload
     </button>
   )
 }
 
 export default function FileUploadForm() {
-  const [message, setMessage] = useState('')
-
   async function handleSubmit(formData: FormData) {
-    console.log("TODO")
+    const response = await fetch(`${window.location.origin}/api/files`, {
+      method: "POST", 
+      body: formData,
+    })
+    const r = await response.json()
+     // Temporary workaround to trigger page reload
+    location.reload()
+    return r;
   }
 
   return (
@@ -31,8 +31,6 @@ export default function FileUploadForm() {
       <div>
         <SubmitButton />
       </div>
-      {message && <p className="text-sm text-gray-600">{message}</p>}
     </form>
   )
 }
-

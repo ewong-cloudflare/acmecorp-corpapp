@@ -6,28 +6,31 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start:resetandmigrate:prod": "prisma migrate reset --force && prisma migrate deploy && pm2-runtime npm -- start",
+    "start:resetseedandmigrate:prod": "prisma migrate reset --force && prisma db seed && prisma migrate deploy && pm2-runtime npm -- start",
+    "start:migrate:prod": "prisma migrate deploy && pm2-runtime npm -- start"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.2.1",
     "autoprefixer": "^10.4.20",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.468.0",
     "next": "15.1.0",
+    "prisma": "^6.2.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
+    "@types/node": "^20.17.12",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }
