@@ -12,12 +12,14 @@ This project contains the following:
 └── postgres 
 ```
 
-![Architecture Diagram](https://github.com/ewong-cloudflare/acmecorp-backend/blob/main/container-diagram?raw=true)
-
 - `nextjs-acmecorp` - Image for NextJS fullstack app container
 - `nginx-acmecorp` - Image for Nginx proxy
 - `postgres` - Image for Postgres database 
 
 # Run containers
 
-Refer [Run containers on host](./docs/run_containers_on_host.md)
+Refer [Run containers on host](./docs/run_containers_on_host.md).
+
+Here's the architectural diagram of the setup used:
+
+![Architecture Diagram](./docs/assets/architecture_diagram.jpg)
