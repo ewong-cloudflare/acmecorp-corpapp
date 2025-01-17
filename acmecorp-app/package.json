@@ -17,6 +17,8 @@
   "dependencies": {
     "@prisma/client": "^6.2.1",
     "autoprefixer": "^10.4.20",
+    "jspdf": "^2.5.2",
+    "jspdf-autotable": "^3.8.4",
     "next": "15.1.0",
     "prisma": "^6.2.1",
     "react": "^19.0.0",

@@ -5,6 +5,7 @@ import styles from "./page.module.css";
 import Hero from "./../components/Hero";
 import EmployeeForm from "../components/EmployeeForm";
 import EmployeeTable from "../components/EmployeeTable";
+import ExportButton from "../components/ExportButton";
 
 export default function Home() {
 
@@ -30,7 +31,14 @@ export default function Home() {
               <EmployeeForm />
             </section>
             <section className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-2xl font-semibold mb-4 text-black">Employee Records</h2>
+              <div className="grid grid-cols-2 gap-8 md:grid-cols-2 mb-2">
+                  <div>
+                    <h2 className="text-2xl font-semibold mb-4 text-black">Employee Records</h2>
+                  </div>
+                  <div className="text-right">
+                    <ExportButton />
+                  </div>
+              </div>
               <EmployeeTable />
             </section>
           </div>
