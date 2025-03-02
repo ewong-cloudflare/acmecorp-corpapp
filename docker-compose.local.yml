@@ -1,3 +1,5 @@
+# This is used for running the contains using images that are built locally
+
 name: acmecorp-app
     
 services:
