@@ -3,7 +3,7 @@ name: acmecorp-app
 services:
   nextjs:
     container_name: acmecorp-app
-    image: nextjs-acmecorp
+    image: r2-registry-production.acmecorp.workers.dev/nextjs-acmecorp
     build: 
       context: ./acmecorp-app
       dockerfile: ./Dockerfile
@@ -18,7 +18,7 @@ services:
     
   nginx:
     container_name: proxy_service
-    image: nginx-acmecorp
+    image: r2-registry-production.acmecorp.workers.dev/nginx-acmecorp
     build: 
       context: ./nginx
       dockerfile: ./Dockerfile

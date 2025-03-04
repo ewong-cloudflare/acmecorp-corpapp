@@ -1,19 +1,25 @@
-# (Option 1) Run containers on host (VM running Debian)
-**Note:** Option 1 is typically used for staging and production purposes.
+# Run containers on host
+
+## Pre-reqs
+
+A host environment requires the following:
+
+* [Git](https://github.com/git-guides/install-git): To download the relevant repository
+* [Docker](https://www.docker.com/get-started/): To run the containers
+
+## (Option 1) Run containers on VM (Debian OS)
+
+> [!note]
+> Option 1 is typically used for **demo** purposes.
 
 Some of the commands used in this steps are specific to a certain OS - in this case, a Debian OS. 
 
-Customize the steps accordingly, if you are using a host that runs a OS.
+Customize the steps accordingly, if you are using a host that runs a different OS.
 
-In general, a host environment requires the following:
+### Steps
 
-- Git: To download the relevant repository
-- Docker: To run the containers
-
-## Steps
-
-1. Create a VM with the relevant network configuration. 
-   1. Note: The smallest, free tier VM is sufficient. 
+1. Create a VM with the relevant network configuration.
+   1. Note: The published image is currently compatible with: `linux/arm64/v8`. On GCP, this is the [C4A series](https://cloud.google.com/compute/docs/instances/arm-on-compute).
 
 2. In the VM, install `git`: 
 
@@ -26,39 +32,96 @@ In general, a host environment requires the following:
 3. Install Docker:
 
     ```bash
-        sudo apt update && \
-        sudo apt install apt-transport-https ca-certificates curl software-properties-common -yq && \ 
-        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg &&
-        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-        sudo apt update && \
-        sudo apt install docker-ce docker-ce-cli containerd.io -yq && \
-        sudo systemctl start docker && \
-        sudo systemctl enable docker
+        # Add Docker's official GPG key:
+        sudo apt-get update
+        sudo apt-get install ca-certificates curl
+        sudo install -m 0755 -d /etc/apt/keyrings
+        sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+        sudo chmod a+r /etc/apt/keyrings/docker.asc
+    ```
+
+    ```bash
+        # Add the repository to Apt sources:
+        echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+    ```
+
+    ```bash
+        # Install latest Docker packages and start the service:
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -yq && \
+        sudo service docker start
     ```
 
     Verify that Docker is available: `docker --version`
 
-4. Download the `acmecorp-backend` repository:
+4. Clone the `acmecorp-corpapp` repository:
    
     ```bash
-        git clone https://github.com/ewong-cloudflare/acmecorp-backend.git
+        git clone https://github.com/ewong-cloudflare/acmecorp-corpapp
     ```
 
-5. Access the directory and run the containers in the background:
+5. Authenticate into Docker using the credentials used for R2 image registry
 
     ```bash
-        cd acmecorp-backend && sudo docker compose up -d
+        export REGISTRY_URL="<YOUR-DOMAIN>" \
+        echo <DOCKER_PASSWORD> | sudo docker login --username <DOCKER_USERNAME> --password-stdin $REGISTRY_URL
     ```
 
-# (Option 2) Run containers on local machine
-**Note:** Option 2 is typically used for development and debugging purposes.
+6. Access the directory and run the containers in the background:
 
-1. Build both containers
-    1. From within folder `acmecorp-app`, build image: `nextjs-acmecorp`. Command: `docker build -t nextjs-acmecorp . --no-cache`
-    1. From within folder `nginx`, build image: `nginx-acmecorp`. Command: `docker build -t nginx-acmecorp . --no-cache`
+    ```bash
+        cd acmecorp-corpapp && sudo docker compose up -d
+    ```
 
-2. From project root, run the containers as background process `docker compose up -d`
-   1. (Optional) Remove the `-d` flag if you prefer foreground process
-3. Access app from: `localhost:80`
-4. To restart containers: `docker compose restart`
-5. To destroy containers: `docker compose down`
+    `acmecorp-corpapp` web app is now accesssible at: `http://<ip-address>:80` 🎉
+
+## (Option 2) Run containers on local machine
+
+> [!note]
+> Option 2 is typically used for **development and debugging** purposes.
+
+### Steps
+
+1. Clone the `acmecorp-corpapp` repository to your local machine:
+   
+    ```bash
+        git clone https://github.com/ewong-cloudflare/acmecorp-corpapp
+    ```
+
+2. Ensure that Docker is **installed and running**
+
+3. Authenticate into Docker using the credentials used for R2 image registry
+
+    ```bash
+        export REGISTRY_URL="<YOUR-DOMAIN>" \
+        echo <DOCKER_PASSWORD> | docker login --username <DOCKER_USERNAME> --password-stdin $REGISTRY_URL
+    ```
+
+4. Access the directory and run the containers in the background:
+
+    ```bash
+        cd acmecorp-corpapp && docker compose up -d
+    ```
+
+    Alternatively, run as foreground process
+
+    ```bash
+        docker compose up
+    ```
+
+    `acmecorp-corpapp` web app is now accesssible at: `http://localhost:80` 🎉
+
+5. (Optional Step): Restart containers
+
+    ```bash
+        docker compose restart
+    ```
+
+6. (Optional Step): Destroy containers
+
+    ```bash
+        docker compose down
+    ```
