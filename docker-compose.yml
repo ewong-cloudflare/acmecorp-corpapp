@@ -35,7 +35,7 @@ services:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=acmecorp
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - ./postgres/scripts:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
